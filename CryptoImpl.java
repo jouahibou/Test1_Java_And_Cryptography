@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,7 +14,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.swing.JFileChooser;
 
-public class Genkey implements Icrypto {
+public class CryptoImpl implements Icrypto {
     
         private Cipher c;
         private CipherInputStream cis;
@@ -75,6 +76,12 @@ public class Genkey implements Icrypto {
 
         //transform: "AES/CBC/PKCS5Padding"
          //Cipher.ENCRYPT_MODE
+        /**
+         * 
+         * @param keyfile
+         * @param mode
+         * @return
+         */
         public Cipher getCipher(String keyfile, int mode){
             try {
 
@@ -87,7 +94,11 @@ public class Genkey implements Icrypto {
             }
             return c;
         }
-
+        /**
+         * 
+         * @param fileToencrypt :le chemin du fichier a chiffrer
+         * @param keyfile :le chemin de la cle de chiffrement
+         */
         public void Chiffrement(String fileToencrypt,String keyfile){
             try {
 
@@ -112,7 +123,11 @@ public class Genkey implements Icrypto {
             }
             System.out.println(fileToEncrypt);
         }
-
+        /**
+         * 
+         * @param fileTodecrypt : le chemin du fichier a dechiffrer
+         * @param keyfile : le chemin de la cle de dechiffrement
+         */
         public void Dechiffrement(String fileTodecrypt,String keyfile){
             try {
 
@@ -138,7 +153,10 @@ public class Genkey implements Icrypto {
 
 
     JFileChooser jfc = new JFileChooser();
-
+/**
+ * Cette methode sert a sauvegarder la cle 
+ * @param key : la cle 
+ */
     public void showSaveDg( SecretKey key){
         int option = jfc.showSaveDialog(jfc);
 
@@ -150,7 +168,10 @@ public class Genkey implements Icrypto {
         String encoding = Base64.getEncoder().encodeToString(key.getEncoded());
         System.out.println(encoding);
     }
-
+/**
+ * Cette methode sert a selectionner l'endroit ou vous voulez sauvegarder le fichier chiffrer
+ * @param fileToencrypt :le chemin du fichier  a chiffrer
+ */
     public void showSavechiffremnt( String fileToencrypt){
         int option = jfc.showSaveDialog(jfc);
 
@@ -162,7 +183,11 @@ public class Genkey implements Icrypto {
         //String encoding = Base64.getEncoder().encodeToString(fileToencrypt.getBytes(fil));
        // System.out.println(encoding);
     }
-
+/**
+ * 
+ * @param key : la cle de dechiffrement
+ * @return : le chemin de la cle de dechiffrement
+ */
     public String showOpenKeyFile(SecretKey key){
         int option = jfc.showOpenDialog(jfc);
         if(JFileChooser.APPROVE_OPTION==option){
@@ -174,7 +199,10 @@ public class Genkey implements Icrypto {
         System.out.println(encoding2);
         return keyFile;
     }
-
+    /**
+     * Cette methode permet de choisir le chemin du fichier a chiffrer
+     * @return : le chemin  du fichier a chiffrer
+     */
     public String showOpenFileToEncrypt(){
 
         int option = jfc.showOpenDialog(jfc);
@@ -185,16 +213,20 @@ public class Genkey implements Icrypto {
 
         return fileToEncrypt;
     }
-    
+    /**
+     * cette methode fait appel a la methode showOpenFileToEncrypt()
+     * @return : le chemin  du fichier a chiffrer
+     */
     public String showOpenFileToDecrypt(){
         return showOpenFileToEncrypt();
     }
-
+    /**
+     * 
+     * @param key : la cle
+     */
     public void affichage(SecretKey key){
         JFileChooser jfc = new JFileChooser();
-        //int option = jfc.showSaveDialog(jfc);
         int option = jfc.showOpenDialog(jfc);
-
         if(JFileChooser.APPROVE_OPTION==option){
             String filePath = jfc.getSelectedFile().getAbsolutePath();
             this.saveKey(key, filePath);
@@ -202,6 +234,7 @@ public class Genkey implements Icrypto {
         String encoding = Base64.getEncoder().encodeToString(key.getEncoded());
         System.out.println(encoding);
     }
+   
 
     //Dechiffrement a revoir avant de faire quoi ce soit Merci Khaly
    
